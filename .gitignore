@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Secrets and local data (never commit these)
+.env
+db_config.py
+users.json
+prediction_history.csv
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

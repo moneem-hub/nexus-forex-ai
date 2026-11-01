@@ -16,3 +16,5 @@ forex_model.pkl
 Thumbs.db
 .vscode/
 .idea/
+
+data/raw/

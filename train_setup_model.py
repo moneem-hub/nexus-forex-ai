@@ -37,6 +37,16 @@ EMBARGO = pd.Timedelta(days=1)
 RNG = np.random.default_rng(42)
 
 
+def add_direction_features(df: pd.DataFrame) -> pd.DataFrame:
+    """Make inputs direction-aware. Used by training AND by the live agent, so both see identical inputs."""
+    df = df.copy()
+    sgn = np.where(df["is_buy"] == 1, 1.0, -1.0)
+    for c in ("ret_4h", "ret_12h", "ret_24h", "dist_sma_24h"):
+        df[c + "_dir"] = df[c] * sgn                                     # momentum / stretch relative to the trade
+    df["asian_pos_dir"] = np.where(df["is_buy"] == 1, df["asian_pos"], 1 - df["asian_pos"])  # 0 = entered at the favourable end
+    return df
+
+
 def load_setups(pattern: str) -> pd.DataFrame:
     files = sorted(glob.glob(pattern))
     if not files:
@@ -45,10 +55,7 @@ def load_setups(pattern: str) -> pd.DataFrame:
     if "tf_min" not in df.columns:
         df["tf_min"] = 15
     df["tf_min"] = df["tf_min"].fillna(15).astype(int)                 # files from the first version are 15-minute
-    sgn = np.where(df["is_buy"] == 1, 1.0, -1.0)
-    for c in ("ret_4h", "ret_12h", "ret_24h", "dist_sma_24h"):
-        df[c + "_dir"] = df[c] * sgn                                     # momentum / stretch relative to the trade
-    df["asian_pos_dir"] = np.where(df["is_buy"] == 1, df["asian_pos"], 1 - df["asian_pos"])  # 0 = entered at the favourable end
+    df = add_direction_features(df)
     df = df.drop_duplicates(["pair", "time", "tf_min"])
     df = df[df.outcome != "PENDING"].sort_values("time").reset_index(drop=True)
     df["y"] = (df.outcome == "PROFIT").astype(int)
@@ -151,6 +158,7 @@ def main():
         with open(a.out, "wb") as f:
             pickle.dump({"model": final, "features": FEATURES,
                          "meta": {"n_train": int(len(df)), "trained_through": str(df.time.max().date()),
+                                  "score_median": float(np.median(final.predict_proba(df[FEATURES])[:, 1])),
                                   "sklearn": sklearn.__version__}}, f)
         print(f"\nSaved Logistic Regression -> {a.out}")
         print("Read the AUC and improvement intervals above BEFORE trusting this model: if they include 0.500 / 0, it has shown no proven skill.")

@@ -100,6 +100,21 @@ def test_invented_numbers_and_promises_are_rejected_then_fixed():
     assert "entry" in seen_errors[0] and "guarantee" in seen_errors[1] and len(sent) == 1
 
 
+def test_percentages_must_come_from_tool_results():
+    reset(); box, sent = fresh()
+    errors = []
+    def invented(r):
+        f = box.found[list(box.found)[0]]
+        return call("send_alert", {"setup_id": f["setup_id"], "message": good_message(f) + " Expected win rate 92%."})
+    def true_percent(r):
+        errors.append(r["error"])
+        f = box.found[list(box.found)[0]]
+        return call("send_alert", {"setup_id": f["setup_id"], "message": good_message(f) + f" Model win chance {f['model_win_chance_percent']}%."})
+    run_agent(FakeLLM(scripted([scan, invented, true_percent, finish])), box, "EURUSD", 5)
+    pct = box.found[list(box.found)[0]]["model_win_chance_percent"]
+    assert "92%" in errors[0] and len(sent) == 1 and f"{pct}%" in sent[0]
+
+
 def test_quiet_market_sends_nothing():
     reset(); box, sent = fresh(now=SUNDAY)
     out = run_agent(FakeLLM(scripted([scan, finish])), box, "EURUSD", 5)

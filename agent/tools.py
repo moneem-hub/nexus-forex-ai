@@ -4,6 +4,7 @@ code. The LLM chooses WHICH tools to call and in what order, and writes the aler
 a price, a score or an outcome, and its message is checked against the real figures before anything is sent.
 """
 import json
+import re
 
 from agent import journal as J
 from agent.alerts import send_alert as deliver
@@ -32,6 +33,10 @@ def validate_alert(message: str, exp: dict) -> str | None:
         return "message must quote exactly these values from the tool result: " + ", ".join(missing)
     if exp.get("quality") and exp["quality"] not in low:
         return f"message must state the setup quality ('{exp['quality']}')"
+    allowed = exp.get("allowed_percents", [])
+    bad = [p for p in re.findall(r"(\d+(?:\.\d+)?)\s*%", message) if not any(abs(float(p) - a) <= 0.51 for a in allowed)]
+    if bad:
+        return "percentages must come from tool results; not allowed: " + ", ".join(p + "%" for p in bad)
     return None
 
 
@@ -52,6 +57,7 @@ class ToolBox:
         self.alerted: set[int] = set()
         self.finished = None
         self.scanned = False
+        self.stat_percents: list[float] = []          # percentages the LLM has legitimately seen in get_journal_stats
 
     # ── tools ─────────────────────────────────────────────────────────────────────────
     def scan_for_setup(self, pair: str, timeframe_min: int) -> dict:
@@ -83,6 +89,7 @@ class ToolBox:
 
     def get_journal_stats(self) -> dict:
         s = J.stats()
+        self.stat_percents = [v["win_rate"] * 100 for v in s.values() if v["win_rate"] is not None]
         return {k: {"resolved_setups": v["n"], "win_rate": None if v["win_rate"] is None else round(v["win_rate"], 3),
                     "mean_result_R": None if v["mean_r"] is None else round(v["mean_r"], 3)} for k, v in s.items()} | \
                {"note": "live record of this agent only; small samples are noise"}
@@ -99,7 +106,8 @@ class ToolBox:
         if setup_id in self.alerted:
             return {"sent": False, "error": "alert already sent for this setup"}
         err = validate_alert(message, {"pair": exp_facts["pair"], "direction": exp_facts["direction"], "entry": exp_facts["entry"],
-                                       "sl": exp_facts["stop_loss"], "tp": exp_facts["take_profit"], "quality": exp_facts["quality"]})
+                                       "sl": exp_facts["stop_loss"], "tp": exp_facts["take_profit"], "quality": exp_facts["quality"],
+                                       "allowed_percents": [exp_facts["model_win_chance_percent"]] + self.stat_percents})
         if err:
             J.log_event(exp_facts["pair"], None, "ALERT_REJECTED", err)
             return {"sent": False, "error": err}

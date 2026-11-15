@@ -19,7 +19,7 @@ Procedure:
    take profit exactly as given. State the quality label ("higher" or "lower") and give the 2-3 main reasons in plain words.
    Be honest: the model score is weak evidence, never a promise. If the agent's own live record is thin, say so.
 4. After the alert is sent, call finish.
-Never invent numbers. Never say a trade is guaranteed or safe."""
+Never invent numbers: any percentage you quote must appear in a tool result. Never say a trade is guaranteed or safe."""
 
 
 def _call(box: ToolBox, name: str, args: dict) -> dict:

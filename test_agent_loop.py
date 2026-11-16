@@ -115,6 +115,12 @@ def test_percentages_must_come_from_tool_results():
     assert "92%" in errors[0] and len(sent) == 1 and f"{pct}%" in sent[0]
 
 
+def test_finish_unwraps_json_wrapped_summary():
+    reset(); box, _ = fresh(now=SUNDAY)
+    out = run_agent(FakeLLM(scripted([scan, lambda r: call("finish", {"summary": '{"summary":"all quiet"}'})])), box, "EURUSD", 5)
+    assert out["summary"] == "all quiet"
+
+
 def test_quiet_market_sends_nothing():
     reset(); box, sent = fresh(now=SUNDAY)
     out = run_agent(FakeLLM(scripted([scan, finish])), box, "EURUSD", 5)

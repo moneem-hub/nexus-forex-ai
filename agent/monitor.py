@@ -88,6 +88,11 @@ class Monitor:
     def tick(self, now: pd.Timestamp) -> None:
         self.stats["ticks"] += 1
         src = _OnceSource(self.source)
+        if now.minute == 0:                                                # hourly heartbeat, even outside the kill zones
+            try:
+                J.log_event(None, None, "HEARTBEAT", {"active": bool(is_active(now)), **self.stats})
+            except Exception:
+                pass
         if self.stats["ticks"] == 1 or now.minute == 0:                    # settle earlier setups: at start-up and hourly
             try:
                 for r in J.resolve_pending(src, now):

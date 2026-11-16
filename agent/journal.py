@@ -89,8 +89,8 @@ def log_setup(setup: dict, scored: dict) -> tuple[int, bool]:
     try:
         cur = conn.cursor()
         try:
-            cur.execute("""INSERT INTO agent_journal (pair, tf_min, signal_time, direction, entry, sl, tp, rr, p_win, quality, factors)
-                           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""", row)
+            cur.execute("""INSERT INTO agent_journal (pair, tf_min, signal_time, direction, entry, sl, tp, rr, p_win, quality, factors, created_at)
+                           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,UTC_TIMESTAMP())""", row)
             conn.commit()
             return cur.lastrowid, True
         except Error as e:
@@ -113,7 +113,7 @@ def mark_alerted(journal_id: int) -> None:
 def log_event(pair: str | None, tf: int | None, event: str, details="") -> None:
     if not isinstance(details, str):
         details = json.dumps(details, default=str)
-    _run("INSERT INTO agent_log (pair, tf_min, event, details) VALUES (%s,%s,%s,%s)", (pair, tf, event, details[:4000]))
+    _run("INSERT INTO agent_log (ts, pair, tf_min, event, details) VALUES (UTC_TIMESTAMP(),%s,%s,%s,%s)", (pair, tf, event, details[:4000]))
 
 
 # ── reading ───────────────────────────────────────────────────────────────────────────
@@ -133,6 +133,12 @@ def recent(limit: int = 20) -> list[dict]:
 
 def recent_log(limit: int = 50) -> list[dict]:
     return _fetch("SELECT * FROM agent_log ORDER BY id DESC LIMIT %s", (limit,))
+
+
+def resolved_rows() -> list[dict]:
+    """Resolved setups in time order (for the cumulative-result chart)."""
+    return _fetch("SELECT signal_time, pair, quality, outcome, r_result FROM agent_journal "
+                  "WHERE outcome IN ('PROFIT','LOSS') ORDER BY signal_time")
 
 
 def stats(exclude_pairs: tuple = ()) -> dict:

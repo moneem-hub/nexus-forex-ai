@@ -55,12 +55,13 @@ render_price_strip(pair, pair_label)
 st.markdown("<br>", unsafe_allow_html=True)
 
 # ── Main tabs (5th tab = Full Calendar) ───────────────────────────────────────
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "  Live Chart  ",
     "  New Prediction  ",
     "  Trading Signals  ",
     "  History  ",
     "  Full Calendar  ",
+    "  Trading Agent  ",
 ])
 
 with tab1:
@@ -122,6 +123,10 @@ with tab5:
     </iframe>""", height=700)
     st.markdown("</div>", unsafe_allow_html=True)
 
+with tab6:
+    from tabs.agent_tab import render_agent_tab
+    render_agent_tab()
+
 # ── Auto-switch to Calendar tab when sidebar button was clicked ───────────────
 if st.session_state.pop('go_calendar', False):
     st.components.v1.html("""
@@ -148,5 +153,5 @@ st.markdown("""
 <br><hr>
 <p style='text-align:center;color:#D4DEFA;font-family:JetBrains Mono,monospace;
 font-size:.52rem;padding:8px 0;letter-spacing:.12em;text-transform:uppercase;'>
-Nexus Forex AI · University of Agriculture Faisalabad · CS FYP 2024
+Nexus Forex AI · NIAI Capstone Project 2026. All rights reserved. | Made with ❤️
 </p>""", unsafe_allow_html=True)

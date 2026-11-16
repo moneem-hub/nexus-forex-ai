@@ -131,6 +131,12 @@ class ToolBox:
         return done
 
     def finish(self, summary: str) -> dict:
+        try:
+            obj = json.loads(summary)
+            if isinstance(obj, dict) and "summary" in obj:
+                summary = str(obj["summary"])
+        except (TypeError, ValueError):
+            pass
         self.finished = summary
         J.log_event(None, None, "FINISH", summary)
         return {"done": True}

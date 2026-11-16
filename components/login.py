@@ -58,7 +58,7 @@ def _left_panel_html() -> str:
         "<div style='font-family:JetBrains Mono,monospace;font-size:.6rem;"
         "color:rgba(156,213,255,.4);letter-spacing:.16em;"
         "text-transform:uppercase;margin-bottom:40px;'>"
-        "AI Trading System &nbsp;&middot;&nbsp; v2.4</div>"
+        "AI Trading System &nbsp;&middot;&nbsp; v2.0</div>"
 
         # Chart card
         "<div style='background:rgba(156,213,255,.04);border:1px solid rgba(156,213,255,.1);"
@@ -99,7 +99,7 @@ def _left_panel_html() -> str:
         "&ldquo;Precision. Speed. Edge.&rdquo;</div>"
         "<div style='font-family:JetBrains Mono,monospace;font-size:.5rem;"
         "color:rgba(156,213,255,.18);letter-spacing:.14em;text-transform:uppercase;'>"
-        "UAF &nbsp;&middot;&nbsp; CS FYP 2024</div>"
+        "NIAI &nbsp;&middot;&nbsp; Nexus Forex AI</div>"
         "</div>"
         "</div>"
     )

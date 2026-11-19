@@ -88,7 +88,7 @@ class Monitor:
     def tick(self, now: pd.Timestamp) -> None:
         self.stats["ticks"] += 1
         src = _OnceSource(self.source)
-        if now.minute == 0:                                                # hourly heartbeat, even outside the kill zones
+        if self.stats["ticks"] == 1 or now.minute % 15 == 0:               # heartbeat at start-up and every 15 minutes, even outside the kill zones
             try:
                 J.log_event(None, None, "HEARTBEAT", {"active": bool(is_active(now)), **self.stats})
             except Exception:

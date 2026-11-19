@@ -8,6 +8,7 @@ import utils.db as D
 D.DB_NAME = "nexus_forex_test"
 
 from agent import journal as J
+import tabs.agent_tab  # noqa: F401  (warm the heavy imports here, so the headless page run below is fast)
 
 SCRIPT = """
 import utils.db as D
@@ -26,9 +27,10 @@ def _setup(t, direction="BUY"):
 def test_tab_renders_empty_then_with_data():
     J.init_journal()
     J._run("DELETE FROM agent_journal"); J._run("DELETE FROM agent_log")
-    at = AppTest.from_string(SCRIPT).run(timeout=30)
+    at = AppTest.from_string(SCRIPT).run(timeout=120)
     assert not at.exception, at.exception
-    assert any("No agent activity" in m.value for m in at.markdown), "empty state missing"
+    assert any("No live agent activity yet" in m.value for m in at.markdown), "empty state missing"
+    assert any("No heartbeat yet" in m.value for m in at.markdown), "warning banner missing"
 
     ids = []
     for t, d in (("2025-03-04 08:00", "BUY"), ("2025-03-04 09:00", "SELL"), ("2025-03-04 14:00", "BUY")):
@@ -38,26 +40,42 @@ def test_tab_renders_empty_then_with_data():
     J._run("UPDATE agent_journal SET outcome='LOSS', r_result=-1.0 WHERE id=%s", (ids[1],))
     J.log_event(None, None, "HEARTBEAT", {"active": True})
 
-    at = AppTest.from_string(SCRIPT).run(timeout=30)
+    at = AppTest.from_string(SCRIPT).run(timeout=120)
     assert not at.exception, at.exception
     html = " ".join(m.value for m in at.markdown)
-    for text in ("Setups seen", "Alerts sent", "Resolved", "Pending", "All setups", "Model: higher quality", "Model: lower quality"):
+    for text in ("Setups seen", "Alerts sent", "Resolved", "Pending", "All setups", "Model: higher quality", "Model: lower quality",
+                 "Journal", "Latest alerts", "Agent activity log"):
         assert text in html, text
     assert "<div class='ag-val'>3</div>" in html                              # 3 setups seen
     assert ">2</div>" in html                                                 # 2 resolved
     assert "too few to judge" in html                                         # small samples are flagged, not celebrated
-    assert any("Monitor running" in s.value for s in at.success), "heartbeat status missing"
-    assert any("quality note" in i.value for i in at.info), "alert detail missing"
-    assert len(at.dataframe) >= 2                                             # journal table + activity log
-    assert "1.10000" in at.dataframe[0].value.to_string()                     # prices keep their 5 decimals (not rounded to 1.1)
+    assert "1.10000" in html and "1.09900" in html and "1.10200" in html      # prices keep their 5 decimals
+    assert "PROFIT" in html and "LOSS" in html and "PENDING" in html          # every outcome has a badge
+    assert "quality note" in html                                             # the stored alert text is shown
+    assert "HEARTBEAT" in html                                                # the activity log lists the events
+    assert "Monitor running" in html, "heartbeat status missing"
     assert "weak evidence" in html                                            # honesty note is always shown
+    assert 'html body [role="tab"]' in html and "#35508F" in html                   # readable tab-bar styling is injected
+
+
+def test_alert_text_is_escaped():
+    """Alert text comes from an LLM: it must never be able to inject HTML into the page."""
+    J.init_journal()
+    J._run("DELETE FROM agent_journal"); J._run("DELETE FROM agent_log")
+    i, _ = J.log_setup(*_setup("2025-03-05 08:00"))
+    J.set_explanation(i, "<script>alert(1)</script> EURUSD BUY"); J.mark_alerted(i)
+    at = AppTest.from_string(SCRIPT).run(timeout=120)
+    html = " ".join(m.value for m in at.markdown)
+    assert "<script>alert(1)</script>" not in html and "&lt;script&gt;" in html
 
 
 def test_replay_mode_reads_the_separate_database_and_restores_the_name():
     J.init_journal()
-    at = AppTest.from_string(SCRIPT).run(timeout=30)
-    at.radio[0].set_value("Replay demo").run(timeout=30)
+    at = AppTest.from_string(SCRIPT).run(timeout=120)
+    at.button(key="ag_replay").click().run(timeout=120)
     assert not at.exception, at.exception
+    assert any("Replay demo: showing" in m.value for m in at.markdown)
+    assert any("st-key-ag_replay" in m.value for m in at.markdown)          # the active mode button is highlighted
     assert D.DB_NAME == "nexus_forex_test"                                 # never left pointing at the replay database
 
 

@@ -62,6 +62,15 @@ def test_weekend_runs_no_jobs_at_all():
     assert stats["jobs"] == 0 and stats["ticks"] > 0
 
 
+def test_heartbeat_is_logged_at_startup_and_every_15_minutes():
+    reset()
+    start = _utc("2025-03-04 09:07")                                             # NOT on the hour
+    mon = Monitor(ReplaySource({("EURUSD", 5): BARS}), BUNDLE, [("EURUSD", 5)], FakeLLM(lambda m: LLMError("x")), SimClock(start), set(), verbose=False)
+    mon.run(until=start + pd.Timedelta(minutes=50))
+    beats = [r for r in J.recent_log(100) if r["event"] == "HEARTBEAT"]
+    assert len(beats) >= 4, len(beats)                                           # first tick + 09:15, 09:30, 09:45 ...
+
+
 def test_a_failing_job_never_stops_the_loop_and_warns_once():
     reset()
     class Broken:

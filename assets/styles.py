@@ -706,7 +706,7 @@ div[data-testid="stDataFrameResizable"] td { color: var(--t2) !important; border
 .login-inputs .stTextInput > div > div > input {
     background: rgba(17,24,68,.6) !important;
     border: 1.5px solid rgba(156,213,255,.2) !important;
-    color: #E8EEFF !important;
+    color: #edeef1 !important;
     border-radius: 10px !important;
     font-size: .86rem !important;
     font-family: 'Roboto', sans-serif !important;

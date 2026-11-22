@@ -330,7 +330,7 @@ def render_login():
             "<div style='margin-top:36px;padding-bottom:48px;'>"
             "<p style='font-family:JetBrains Mono,monospace;font-size:.5rem;"
             "color:#C8D8F0;letter-spacing:.1em;text-transform:uppercase;'>"
-            "UAF &nbsp;&middot;&nbsp; CS FYP 2024 &nbsp;&middot;&nbsp; Systems Online &nbsp;"
+            "NIAI &nbsp;&middot;&nbsp; Capstone Project 2026 &nbsp;&middot;&nbsp; Systems Online &nbsp;"
             "<span style='display:inline-block;width:6px;height:6px;"
             "background:#059669;border-radius:50%;vertical-align:middle;'></span>"
             "</p></div>",

@@ -1,0 +1,250 @@
+/* the app's top tab bar: pill-style menu, readable text, comfortable padding (matches by ARIA role, so it works across Streamlit versions) */
+html body [role="tablist"] {
+    background: #FFFFFF !important;
+    border: 1px solid #D4DEFA !important;
+    border-radius: 14px !important;
+    padding: 6px !important;
+    gap: 4px !important;
+    box-shadow: 0 1px 3px rgba(17, 24, 68, .06) !important;
+}
+
+html body [role="tab"] {
+    font-family: 'Roboto', sans-serif !important;
+    font-size: .88rem !important;
+    font-weight: 600 !important;
+    color: #35508F !important;
+    background: transparent !important;
+    border-radius: 10px !important;
+    padding: 11px 22px !important;
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+    height: auto !important;
+    letter-spacing: .01em !important;
+}
+
+html body [role="tab"] * {
+    color: inherit !important;
+}
+
+html body [role="tab"]:hover {
+    color: #111844 !important;
+    background: rgba(17, 24, 68, .06) !important;
+}
+
+html body [role="tab"][aria-selected="true"],
+html body [role="tab"][aria-selected="true"]:hover {
+    color: #FFFFFF !important;
+    background: #111844 !important;
+    font-weight: 700 !important;
+    border-bottom: none !important;
+    box-shadow: 0 2px 8px rgba(17, 24, 68, .25) !important;
+}
+
+html body [data-baseweb="tab-highlight"],
+html body [data-baseweb="tab-border"] {
+    display: none !important;
+}
+
+.ag-card {
+    background: #fff;
+    border: 1px solid #D4DEFA;
+    border-radius: 14px;
+    padding: 14px 18px;
+    box-shadow: 0 1px 3px rgba(17, 24, 68, .06);
+    height: 100%
+}
+
+.ag-lbl {
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #4A6699;
+    font-weight: 700
+}
+
+.ag-val {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #111844;
+    line-height: 1.25
+}
+
+.ag-sub {
+    font-size: .76rem;
+    margin-top: 2px;
+    font-weight: 600
+}
+
+.ag-h {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #111844;
+    margin: 26px 0 10px
+}
+
+.ag-note {
+    font-size: .8rem;
+    color: #233070;
+    line-height: 1.55;
+    margin: 10px 0 4px
+}
+
+.ag-brow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0
+}
+
+.ag-blbl {
+    width: 130px;
+    font-size: .8rem;
+    font-weight: 600;
+    color: #111844
+}
+
+.ag-btrack {
+    position: relative;
+    flex: 1;
+    height: 18px;
+    background: #E8EEFF;
+    border-radius: 9px
+}
+
+.ag-bfill {
+    height: 18px;
+    border-radius: 9px
+}
+
+.ag-bmark {
+    position: absolute;
+    top: -3px;
+    width: 2px;
+    height: 24px;
+    background: #111844
+}
+
+.ag-bval {
+    width: 190px;
+    font-size: .78rem;
+    color: #233070
+}
+
+.ag-tbl-wrap {
+    max-height: 420px;
+    overflow: auto;
+    border: 1px solid #D4DEFA;
+    border-radius: 12px;
+    background: #fff
+}
+
+.ag-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .82rem;
+    color: #111844
+}
+
+.ag-tbl th {
+    position: sticky;
+    top: 0;
+    background: #E8EEFF;
+    color: #4A6699;
+    text-align: left;
+    font-size: .66rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 9px 12px
+}
+
+.ag-tbl td {
+    padding: 9px 12px;
+    border-top: 1px solid #EEF2FF;
+    white-space: nowrap
+}
+
+.ag-badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 700
+}
+
+.ag-alert {
+    background: #fff;
+    border: 1px solid #D4DEFA;
+    border-left: 4px solid #7AAACE;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin: 10px 0
+}
+
+.ag-alert-top {
+    font-size: .82rem;
+    color: #233070;
+    margin-bottom: 6px
+}
+
+.ag-alert-text {
+    font-size: .88rem;
+    color: #111844;
+    line-height: 1.55
+}
+
+.ag-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: .88rem;
+    font-weight: 600;
+    margin: 14px 0
+}
+
+.ag-banner-ico {
+    font-weight: 800
+}
+
+.ag-empty {
+    border: 2px dashed #B0C4EC;
+    border-radius: 16px;
+    background: #fff;
+    padding: 46px 24px;
+    text-align: center;
+    margin-top: 8px
+}
+
+.ag-empty-ico {
+    font-size: 2.2rem
+}
+
+.ag-empty-ttl {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #111844;
+    margin: 8px 0 6px
+}
+
+.ag-empty-sub {
+    font-size: .86rem;
+    color: #35508F;
+    line-height: 1.7
+}
+
+.ag-code {
+    background: #E8EEFF;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .78rem;
+    color: #111844
+}
+
+.ag-details summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: #111844;
+    margin: 24px 0 10px
+}

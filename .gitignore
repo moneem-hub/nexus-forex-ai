@@ -9,6 +9,7 @@ venv/
 db_config.py
 users.json
 prediction_history.csv
+forex_model.pkl
 
 # OS / editor
 .DS_Store

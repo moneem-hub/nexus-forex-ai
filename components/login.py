@@ -305,8 +305,6 @@ def render_login():
                 st.session_state.logged_in = True
                 st.session_state.username  = username
                 st.session_state.auth_page = 'login'
-                from utils.session import start_session
-                start_session(username)
                 st.rerun()
             else:
                 st.error("Invalid username or password — please try again.")

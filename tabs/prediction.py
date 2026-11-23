@@ -257,23 +257,6 @@ def render_prediction_tab(pair: str, pair_label: str):
                 st.markdown(_signal_card(signal), unsafe_allow_html=True)
             else:
                 st.markdown(_no_signal_card(status), unsafe_allow_html=True)
-        else:
-            # After a refresh or re-login the last scan is gone from session memory: show the latest SAVED signal for this pair
-            _saved = [h for h in st.session_state.get("history", []) if h.get("Pair") == pair_label]
-            if _saved:
-                _h = max(_saved, key=lambda r: str(r["Timestamp"]))
-                try:
-                    _risk = abs(float(_h["Entry"]) - float(_h["Stop Loss"]))
-                    _tp1  = float(_h["Entry"]) + (1.5 * _risk if _h["Signal"] == "BUY" else -1.5 * _risk)   # the card's TP1 = 1.5R
-                    _sig = {"direction": _h["Signal"], "rr": float(str(_h["R:R"]).split(":")[1]), "session_label": "saved signal",
-                            "timestamp": _h["Timestamp"], "entry": float(_h["Entry"]), "sl": float(_h["Stop Loss"]),
-                            "tp": float(_h["Take Profit"]), "tp1": _tp1, "pair": pair_label}
-                    st.markdown("<br>", unsafe_allow_html=True)
-                    st.markdown(f"<div style='font-family:Roboto,sans-serif;font-size:.75rem;color:#4A6699;margin-bottom:6px;'>"
-                                f"Latest saved signal for {pair_label} (restored from history)</div>", unsafe_allow_html=True)
-                    st.markdown(_signal_card(_sig), unsafe_allow_html=True)
-                except (KeyError, ValueError, IndexError):
-                    pass
 
     # ── Right info column ──────────────────────────────────────────────────────
     with col_info:

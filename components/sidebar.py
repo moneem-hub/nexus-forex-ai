@@ -126,7 +126,7 @@ def render_sidebar() -> str:
 
         st.markdown(
             "<p style='text-align:center;color:#1F2B78;font-family:JetBrains Mono,monospace;"
-            "font-size:.5rem;letter-spacing:.1em;padding-bottom:10px;'>UAF · CS FYP 2024</p>",
+            "font-size:.5rem;letter-spacing:.1em;padding-bottom:10px;'>NIAI Capstone Project 2026. All rights reserved. | Made with ❤️</p>",
             unsafe_allow_html=True,
         )
 

@@ -58,7 +58,7 @@ def _left_panel_html() -> str:
         "<div style='font-family:JetBrains Mono,monospace;font-size:.6rem;"
         "color:rgba(156,213,255,.4);letter-spacing:.16em;"
         "text-transform:uppercase;margin-bottom:40px;'>"
-        "AI Trading System &nbsp;&middot;&nbsp; v2.4</div>"
+        "AI Trading System &nbsp;&middot;&nbsp; v2.0</div>"
 
         # Chart card
         "<div style='background:rgba(156,213,255,.04);border:1px solid rgba(156,213,255,.1);"
@@ -99,7 +99,7 @@ def _left_panel_html() -> str:
         "&ldquo;Precision. Speed. Edge.&rdquo;</div>"
         "<div style='font-family:JetBrains Mono,monospace;font-size:.5rem;"
         "color:rgba(156,213,255,.18);letter-spacing:.14em;text-transform:uppercase;'>"
-        "UAF &nbsp;&middot;&nbsp; CS FYP 2024</div>"
+        "NIAI &nbsp;&middot;&nbsp; Nexus Forex AI</div>"
         "</div>"
         "</div>"
     )
@@ -330,7 +330,7 @@ def render_login():
             "<div style='margin-top:36px;padding-bottom:48px;'>"
             "<p style='font-family:JetBrains Mono,monospace;font-size:.5rem;"
             "color:#C8D8F0;letter-spacing:.1em;text-transform:uppercase;'>"
-            "UAF &nbsp;&middot;&nbsp; CS FYP 2024 &nbsp;&middot;&nbsp; Systems Online &nbsp;"
+            "NIAI &nbsp;&middot;&nbsp; Capstone Project 2026 &nbsp;&middot;&nbsp; Systems Online &nbsp;"
             "<span style='display:inline-block;width:6px;height:6px;"
             "background:#059669;border-radius:50%;vertical-align:middle;'></span>"
             "</p></div>",

@@ -1,8 +1,8 @@
 APP_TITLE   = "NEXUS FOREX — AI Trading System"
-APP_VERSION = "v2.4"
+APP_VERSION = "v2.0"
 APP_ICON    = "📈"
 
-PAIRS = ["EURUSD=X", "GBPUSD=X", "USDJPY=X"]
+PAIRS = ["EURUSD=X", "GBPUSD=X", "USDJPY=X", "XAUUSD=X"]
 
 CREDENTIALS = {"admin": "admin123"}
 

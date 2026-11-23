@@ -120,6 +120,8 @@ def render_sidebar() -> str:
         # ── Sign Out ────────────────────────────────────────────────
         st.markdown("<div style='padding:0 12px 14px;'>", unsafe_allow_html=True)
         if st.button("⬡  Sign Out", use_container_width=True, key="signout"):
+            from utils.session import end_session
+            end_session()              # delete the saved login so the old URL stops working
             st.session_state.clear()   # sari session state saaf karo
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)

@@ -24,6 +24,11 @@ st.session_state.setdefault('username', '')
 st.session_state.setdefault('go_calendar', False)
 st.session_state.setdefault('auth_page', 'login')
 
+# Keep users signed in across browser refreshes, with an inactivity timeout (utils/session.py)
+from utils.session import init_sessions, restore_login
+init_sessions()
+restore_login()
+
 # Login hone ke baad us user ki history MySQL se load karo
 # 'history' session mein nahi hogi jab bhi fresh login hoga (clear ke baad)
 if st.session_state.logged_in and st.session_state.username:
@@ -35,6 +40,9 @@ else:
 
 # ── Auth gate (login or signup) ────────────────────────────────────────────────
 if not st.session_state.logged_in:
+    _flash = st.session_state.pop('flash', None)          # e.g. 'session ended after 30 minutes of inactivity'
+    if _flash:
+        st.warning(_flash)
     if st.session_state.auth_page == 'signup':
         from components.signup import render_signup
         render_signup()

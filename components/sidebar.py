@@ -120,13 +120,15 @@ def render_sidebar() -> str:
         # ── Sign Out ────────────────────────────────────────────────
         st.markdown("<div style='padding:0 12px 14px;'>", unsafe_allow_html=True)
         if st.button("⬡  Sign Out", use_container_width=True, key="signout"):
+            from utils.session import end_session
+            end_session()              # delete the saved login so the old URL stops working
             st.session_state.clear()   # sari session state saaf karo
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown(
             "<p style='text-align:center;color:#1F2B78;font-family:JetBrains Mono,monospace;"
-            "font-size:.5rem;letter-spacing:.1em;padding-bottom:10px;'>UAF · CS FYP 2024</p>",
+            "font-size:.5rem;letter-spacing:.1em;padding-bottom:10px;'>NIAI Capstone Project 2026. All rights reserved. | Made with ❤️</p>",
             unsafe_allow_html=True,
         )
 
